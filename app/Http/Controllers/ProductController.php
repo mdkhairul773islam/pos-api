@@ -21,7 +21,7 @@ class ProductController extends Controller
         // get all product
         $data = Product::select("*")->orderBy("id", "desc")
             ->with('category', 'brand', 'unit')
-            ->get();
+            ->paginate($request->per_page);
         return response()
             ->json($data, 200);
     }
