@@ -133,9 +133,9 @@ class ProductController extends Controller
     /**
      * show all category.
      */
-    public function category()
+    public function category(Request $request)
     {
-        $data = Category::select('id', 'name')->get();
+        $data = Category::select('id', 'name')->paginate($request->per_page);
         return response()
             ->json($data, 200);
     }
@@ -305,10 +305,10 @@ class ProductController extends Controller
     /**
      * all brand.
      */
-    public function brand()
+    public function brand(Request $request)
     {
         $data = Brand::select("*")->orderBy("id", "desc")
-            ->get();
+            ->paginate($request->per_page);
 
         return response()
             ->json($data, 200);
@@ -393,10 +393,10 @@ class ProductController extends Controller
     /**
      * all unit.
      */
-    public function unit()
+    public function unit(Request $request)
     {
         $data = Unit::select("*")->orderBy("id", "desc")
-            ->get();
+        ->paginate($request->per_page);
 
         return response()
             ->json($data, 200);
