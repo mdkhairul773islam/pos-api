@@ -20,7 +20,7 @@ class SupplierController extends Controller
     {
         $data = Party::where('party_type', 'supplier')->select(['id', 'address', 'contact_person', 'name', 'mobile','initial_balance'])
             ->orderBy("id", "desc")
-            ->get();
+            ->paginate($request->per_page);
         return response()
             ->json($data, 200);
     }
