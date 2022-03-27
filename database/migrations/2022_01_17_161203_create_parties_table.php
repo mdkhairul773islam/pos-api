@@ -16,6 +16,7 @@ class CreatePartiesTable extends Migration
         Schema::create('parties', function (Blueprint $table) {
             $table->id();
             $table->date('created')->nullable();
+            $table->string('code')->unique();
             $table->string('name');
             $table->string('contact_person')->nullable();
             $table->string('mobile')->nullable();
@@ -23,6 +24,7 @@ class CreatePartiesTable extends Migration
             $table->string('remarks')->nullable();
             $table->decimal('initial_balance', 10, 2);
             $table->string('party_type')->nullable();
+            $table->string('showroom_id')->nullable();
             $table->string('status')->default('active');
             $table->softDeletes('deleted_at');
             $table->timestamps();

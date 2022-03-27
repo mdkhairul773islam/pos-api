@@ -10,7 +10,7 @@ class SupplierController extends Controller
     public function __construct()
     {
         //$this->middleware('auth');
-        
+
     }
 
     /**
@@ -24,6 +24,18 @@ class SupplierController extends Controller
         return response()
             ->json($data, 200);
     }
+    
+    /**
+     * Display a showroom wise supplier list of the resource.
+     */
+    public function showroomWiseSupplier($showroom_id){
+        if(!empty($showroom_id)){
+            $data = Party::where('party_type', 'supplier')->where('showroom_id', $showroom_id)->select([DB::raw("CONCAT(name,' - ',mobile) AS label"), 'id as value', 'showroom_id', 'address', 'name', 'mobile','initial_balance'])
+                ->orderBy("id", "desc")->get();
+                return response()
+                ->json($data, 200);
+        }
+   }
 
     /**
      * Store a newly created resource in storage.
@@ -85,7 +97,7 @@ class SupplierController extends Controller
         $data->party_type = 'supplier';
         $data->address = $request->address;
         $data->remarks = $request->remarks;
-        
+
         if($request->initial_balance <0 && $request->balance_status == 'payable'){
             $data->initial_balance = $request->initial_balance;
         }else{

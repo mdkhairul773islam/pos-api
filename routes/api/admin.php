@@ -16,7 +16,7 @@ use App\Http\Controllers\LoginController;
 
 Route::post('admin/login',[LoginController::class, 'adminLogin'])->name('adminLogin');
 Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:admin'] ],function(){
-   // authenticated staff routes here 
+   // authenticated staff routes here
     Route::get('dashboard',[LoginController::class, 'adminDashboard']);
 
     //category module
@@ -54,5 +54,7 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
     Route::get('/supplier-edit/{id}', [App\Http\Controllers\SupplierController::class, 'edit']);
     Route::post('/supplier-update', [App\Http\Controllers\SupplierController::class, 'update']);
     Route::get('/supplier-destroy/{id}', [App\Http\Controllers\SupplierController::class, 'destroy']);
-    
+    Route::get('/showroom-wise-supplier/{showroom_id}', [App\Http\Controllers\SupplierController::class, 'showroomWiseSupplier']);
+   
+
 });
