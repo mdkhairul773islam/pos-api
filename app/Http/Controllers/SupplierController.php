@@ -45,13 +45,16 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
+        $supplier_code = "SI-".date('d').random_int(1000, 9999);
         $data = new Party;
 
         $data->created = date('Y-m-d');
+        $data->code = $supplier_code;
         $data->name = $request->name;
         $data->contact_person = $request->contact_person;
         $data->mobile = $request->mobile;
         $data->party_type = 'supplier';
+        $data->showroom_id = '0001';
         $data->address = $request->address;
         $data->remarks = $request->remarks;
         $data->initial_balance = ($request->balance_status == 'payable' ? '-' : '') . $request->initial_balance;

@@ -42,11 +42,11 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
 
     //product module
     Route::any('/product', [App\Http\Controllers\ProductController::class, 'index']);
+    Route::get('/product-list', [App\Http\Controllers\ProductController::class, 'productList']);
     Route::post('/product-store', [App\Http\Controllers\ProductController::class, 'store']);
     Route::get('/product-edit/{id}', [App\Http\Controllers\ProductController::class, 'edit']);
     Route::post('/product-update', [App\Http\Controllers\ProductController::class, 'update']);
     Route::get('/product-destroy/{id}', [App\Http\Controllers\ProductController::class, 'destroy']);
-    Route::any('/product', [App\Http\Controllers\ProductController::class, 'index']);
 
     //supplier module
     Route::any('/supplier', [App\Http\Controllers\SupplierController::class, 'index']);
@@ -56,5 +56,4 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
     Route::get('/supplier-destroy/{id}', [App\Http\Controllers\SupplierController::class, 'destroy']);
     Route::get('/showroom-wise-supplier/{showroom_id}', [App\Http\Controllers\SupplierController::class, 'showroomWiseSupplier']);
    
-
 });

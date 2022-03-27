@@ -26,6 +26,16 @@ class ProductController extends Controller
             ->json($data, 200);
     }
 
+    // Onlay product name get for product list
+    public function productList(Request $request)
+    {
+        // get all product
+        $data = Product::select("name as label", "code as value ")->orderBy("name", "ASC")
+            ->get();
+        return response()
+            ->json($data, 200);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
