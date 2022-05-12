@@ -70,7 +70,7 @@ class ProductController extends Controller
             $data->unit_id = $request->unit_id;
 
             $data->save();
-
+            
             $data = ['success' => 'Product successfully added.'];
         }
 
