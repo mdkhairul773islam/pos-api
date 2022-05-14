@@ -33,11 +33,7 @@ class Application extends Container implements ApplicationContract, CachesConfig
      *
      * @var string
      */
-<<<<<<< HEAD
-    const VERSION = '8.83.5';
-=======
     const VERSION = '8.83.7';
->>>>>>> 50b4cb34ff1d657cc28a166bbb8b193b3f82d41f
 
     /**
      * The base path for the Laravel installation.

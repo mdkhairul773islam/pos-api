@@ -16,11 +16,7 @@
     "require": {
         "php": "^7.3|^8.0",
         "ext-json": "*",
-<<<<<<< HEAD
-        "firebase/php-jwt": "^5.0",
-=======
         "firebase/php-jwt": "^6.0",
->>>>>>> 50b4cb34ff1d657cc28a166bbb8b193b3f82d41f
         "illuminate/auth": "^8.37|^9.0",
         "illuminate/console": "^8.37|^9.0",
         "illuminate/container": "^8.37|^9.0",
