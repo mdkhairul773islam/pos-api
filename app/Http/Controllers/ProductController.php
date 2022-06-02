@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Subcategory;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 
 class ProductController extends Controller
 {
@@ -42,7 +43,7 @@ class ProductController extends Controller
     
     public function store(Request $request)
     {
-
+        $photo = '';
         if(isset($_FILES["file"]) && $_FILES["file"]["error"] == 0){
             $allowed = array("jpg" => "image/jpg", "jpeg" => "image/jpeg", "gif" => "image/gif", "png" => "image/png");
             $filename = $_FILES["file"]["name"];
@@ -73,9 +74,38 @@ class ProductController extends Controller
             echo "Error: " . $_FILES["file"]["error"];
         }
 
-        $file =$_FILES['file'];;
-        $data = $file;
-        return response()->json([$file,$data], 200);
+
+        $productName = trim($request->name);
+
+        // generate product code
+        $code = rand(100000, 999999);
+        while (Product::where('code', $code)->first())
+        {
+            $code = rand(100000, 999999);
+        }
+
+        if (Product::where('name', $productName)->first())
+        {
+            $data = ['warning' => 'This product already exists.'];
+        }
+        else
+        {
+            $data = new Product;
+            $data->code = $code;
+            $data->name = $productName;
+            $data->category_id = $request->category_id;
+            $data->brand_id = $request->brand_id;
+            $data->purchase_price = $request->purchase_price;
+            $data->sale_price = $request->sale_price;
+            $data->status = $request->status;
+            $data->unit_id = $request->unit_id;
+            $data->photo    = $filename;
+
+            $data->save();
+            
+            $data = ['success' => 'Product successfully added.'];
+        }
+        return response()->json($data, 200);
     }
 
     /**
