@@ -39,19 +39,10 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    
     public function store(Request $request)
     {
 
-        $file = $_FILES['photo'];
-        if($file) {
-            
-         }
-/*          $data['file'] = ['full_path'];
-         $data ["all"] = $request->all(); */
-
-
-        /* $productName = trim($request->name);
+        $productName = trim($request->name);
 
         // generate product code
         $code = rand(100000, 999999);
@@ -81,9 +72,7 @@ class ProductController extends Controller
             $data->save();
             
             $data = ['success' => 'Product successfully added.'];
-        } */
-
-        
+        }
 
         return response()->json($data, 200);
     }
