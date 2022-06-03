@@ -6,6 +6,8 @@ use App\Models\Product;
 use App\Models\Subcategory;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -41,25 +43,35 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
+        
+        $data = $request->all();
+        $image_64 = $data['photo']; //your base64 encoded data
+        $extension = explode('/', explode(':', substr($image_64, 0, strpos($image_64, ';')))[1])[1];   // .jpg .png .pdf
 
-        $productName = trim($request->name);
+        $replace = substr($image_64, 0, strpos($image_64, ',')+1); 
+      
+      // find substring fro replace here eg: data:image/png;base64,
+      
+       $image = str_replace($replace, '', $image_64); 
+       $image = str_replace(' ', '+', $image); 
+       $imageName = Str::random(10).'.'.$extension;
+       
+       Storage::disk('public')->put($imageName, base64_decode($image));
+       file_put_contents('public/upload/'.$imageName, base64_decode($image));
 
         // generate product code
-        $code = rand(100000, 999999);
-        while (Product::where('code', $code)->first())
+        //$code = rand(100000, 999999);
+        /* while (Product::where('code', $code)->first())
         {
             $code = rand(100000, 999999);
         }
-
         if (Product::where('name', $productName)->first())
         {
             $data = ['warning' => 'This product already exists.'];
         }
         else
         {
-
             $data = new Product;
-
             $data->code = $code;
             $data->name = $productName;
             $data->category_id = $request->category_id;
@@ -68,13 +80,13 @@ class ProductController extends Controller
             $data->sale_price = $request->sale_price;
             $data->status = $request->status;
             $data->unit_id = $request->unit_id;
-
-            $data->save();
             
-            $data = ['success' => 'Product successfully added.'];
-        }
+            
+            //$data->save();
+            
+            //$data = ['success' => 'Product successfully added.'];
+        } */
 
-        return response()->json($data, 200);
     }
 
     /**
