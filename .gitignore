@@ -1,3 +1,4 @@
+/vendor/
 /node_modules
 .phpunit.result.cache
 docker-compose.override.yml
@@ -8,5 +9,5 @@ yarn-error.log
 /.idea
 /.vscode
 /.zip
-vendor/
-public/
+public/upload
+
