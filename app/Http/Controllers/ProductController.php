@@ -44,17 +44,15 @@ class ProductController extends Controller
     public function store(Request $request)
     {
        $filename_path =  base64FormatingFileUplaod($request->photo, 'upload/');
-
-        return response()
-        ->json($filename_path, 200);
-
+       
+       $product_name = trim($request->name);
         // generate product code
-        //$code = rand(100000, 999999);
-        /* while (Product::where('code', $code)->first())
+        $code = rand(100000, 999999);
+         while (Product::where('code', $code)->first())
         {
             $code = rand(100000, 999999);
         }
-        if (Product::where('name', $productName)->first())
+        if (Product::where('name', $product_name)->first())
         {
             $data = ['warning' => 'This product already exists.'];
         }
@@ -62,19 +60,22 @@ class ProductController extends Controller
         {
             $data = new Product;
             $data->code = $code;
-            $data->name = $productName;
+            $data->name = $product_name;
             $data->category_id = $request->category_id;
             $data->brand_id = $request->brand_id;
             $data->purchase_price = $request->purchase_price;
             $data->sale_price = $request->sale_price;
             $data->status = $request->status;
             $data->unit_id = $request->unit_id;
+            $data->photo   = $filename_path;
             
+            $data->save();
             
-            //$data->save();
-            
-            //$data = ['success' => 'Product successfully added.'];
-        } */
+            $data = ['success' => 'Product successfully added.'];
+        } 
+        
+        return response()
+            ->json($data, 200);
 
     }
 

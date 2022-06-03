@@ -64,10 +64,10 @@ class ProductController extends Controller
             $data->name = $productName;
             $data->category_id = $request->category_id;
             $data->brand_id = $request->brand_id;
+            $data->unit_id = $request->unit_id;
             $data->purchase_price = $request->purchase_price;
             $data->sale_price = $request->sale_price;
             $data->status = $request->status;
-            $data->unit_id = $request->unit_id;
 
             $data->save();
             
