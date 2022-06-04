@@ -9,5 +9,5 @@ yarn-error.log
 /.idea
 /.vscode
 /.zip
-public/upload
+public/upload/
 
