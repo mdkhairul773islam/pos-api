@@ -3,7 +3,6 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Subcategory;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -87,9 +86,8 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        // get product info
-        $data = Product::where('id', $id)->first();
-
+        // get product info 
+        $data = Product::find($id);
         return response()
             ->json($data, 200);
     }
@@ -164,7 +162,7 @@ class ProductController extends Controller
      */
     public function category(Request $request)
     {
-        $data = Category::select('id', 'name')->paginate($request->per_page);
+        $data = Category::select('id', 'name')->orderBy("id", "desc")->paginate($request->per_page);
         return response()
             ->json($data, 200);
     }
@@ -178,7 +176,7 @@ class ProductController extends Controller
 
         if (Category::where('name', $category)->first())
         {
-            $message = ['warning' => 'This category already exists.'];
+            $data = ['warning' => 'This category already exists.'];
         }
         else
         {
@@ -187,10 +185,7 @@ class ProductController extends Controller
             $data->name = $category;
             $data->save();
 
-            $message = ['success' => 'Category successfully added.'];
-
-            $data = Category::select("*")->orderBy("id", "desc")
-                ->get();
+            $data = ['success' => 'Category successfully added.'];
         }
 
         return response()
@@ -217,19 +212,16 @@ class ProductController extends Controller
         if (Category::where('name', $category)->where('id', '!=', $request->id)
             ->first())
         {
-            $message = ['warning' => 'This category already exists.'];
+            $data = ['warning' => 'This category already exists.'];
         }
         else
         {
-
             $data = Category::find($request->id);
             $data->name = $category;
 
             $data->save();
 
-            $message = ['update' => 'Category successfully updated.'];
-            $data = Category::select("*")->orderBy("id", "desc")
-                ->get();
+            $data = ['success' => 'Category successfully updated.'];
         }
 
         return response()
@@ -243,92 +235,10 @@ class ProductController extends Controller
     {
         Category::find($id)->delete();
 
-        $data = Category::select("*")->orderBy("id", "desc")
-            ->get();
+        $data = ['success' => 'Category successfully deleted.'];
 
         return response()
             ->json($data, 200);
-    }
-
-    /**
-     * show all subcategory.
-     */
-    public function subcategory(Request $request)
-    {
-        $data = Subcategory::all();
-        return response()->json($data, 200);
-    }
-
-    /**
-     * store subcategory.
-     */
-    public function subcategoryStore(Request $request)
-    {
-        $subcategory = trim($request->name);
-
-        if (Subcategory::where('name', $subcategory)->first())
-        {
-            $message = ['warning' => 'This subcategory already exists.'];
-        }
-        else
-        {
-
-            $data = new Subcategory;
-            $data->name = $subcategory;
-            $data->save();
-
-            $message = ['success' => 'Subcategory successfully added.'];
-        }
-
-        return redirect()->route('admin.product.subcategory')
-            ->with($message);
-    }
-
-    /**
-     * edit subcategory.
-     */
-    public function subcategoryEdit(Request $request)
-    {
-        return Subcategory::select(['id', 'name'])->find($request->id);
-    }
-
-    /**
-     * update subcategory.
-     */
-    public function subcategoryUpdate(Request $request)
-    {
-
-        $subcategory = trim($request->name);
-
-        if (Subcategory::where('name', $subcategory)->where('id', '!=', $request->id)
-            ->first())
-        {
-            $message = ['warning' => 'This subcategory already exists.'];
-        }
-        else
-        {
-
-            $data = Subcategory::find($request->id);
-            $data->name = $subcategory;
-            $data->save();
-
-            $message = ['update' => 'Subcategory successfully updated.'];
-        }
-
-        return redirect()->route('admin.product.subcategory')
-            ->with($message);
-    }
-
-    /**
-     * delete subcategory.
-     */
-    public function subcategoryDestroy($id)
-    {
-        Subcategory::find($id)->delete();
-
-        return redirect()
-            ->route('admin.product.subcategory')
-            ->with(['delete' => 'Subcategory deleted successful.']);
     }
 
     /**
@@ -352,7 +262,7 @@ class ProductController extends Controller
 
         if (Brand::where('name', $brand)->first())
         {
-            $message = ['warning' => 'This brand already exists.'];
+            $data = ['warning' => 'This brand already exists.'];
         }
         else
         {
@@ -361,9 +271,7 @@ class ProductController extends Controller
             $data->name = $brand;
             $data->save();
 
-            $message = ['success' => 'Brand successfully added.'];
-            $data = Brand::select("*")->orderBy("id", "desc")
-                ->get();
+            $data = ['success' => 'Brand successfully added.'];
         }
 
         return response()
@@ -375,7 +283,9 @@ class ProductController extends Controller
      */
     public function brandEdit(Request $request)
     {
-        return Brand::select(['id', 'name'])->find($request->id);
+        $data = Brand::select(['id', 'name'])->find($request->id);
+        return response()
+            ->json($data, 200);
     }
 
     /**
@@ -389,7 +299,7 @@ class ProductController extends Controller
         if (Brand::where('name', $brand)->where('id', '!=', $request->id)
             ->first())
         {
-            $message = ['warning' => 'This brand already exists.'];
+            $data = ['warning' => 'This brand already exists.'];
             return response()->json($message, 200);
         }
         else
@@ -398,12 +308,11 @@ class ProductController extends Controller
             $data->name = $brand;
             $data->save();
 
-            $brandList = Brand::select("*")->orderBy("id", "desc")
-                ->get();
+            $data = ['success' => 'This brand updated successfylly.'];
         }
 
         return response()
-            ->json($brandList, 200);
+            ->json($data, 200);
     }
 
     /**
@@ -412,11 +321,9 @@ class ProductController extends Controller
     public function brandDestroy($id)
     {
         Brand::find($id)->delete();
-
-        $brandList = Brand::select("*")->orderBy("id", "desc")
-            ->get();
+        $data = ['success' => 'Brand Successfully Deleted.'];
         return response()
-            ->json($brandList, 200);
+            ->json($data, 200);
     }
 
     /**
@@ -436,25 +343,18 @@ class ProductController extends Controller
      */
     public function unitStore(Request $request)
     {
-
         $unit = trim($request->unit);
 
         if (Unit::where('unit', $unit)->first())
         {
-            $message = ['warning' => 'This unit already exists.'];
+            $data = ['warning' => 'This unit already exists.'];
         }
         else
         {
-
             $data = new Unit;
-
             $data->unit = $unit;
-
             $data->save();
-
-            $message = ['success' => 'Unit successfully added.'];
-            $data = Unit::select("*")->orderBy("id", "desc")
-                ->get();
+            $data = ['success' => 'Unit successfully added.'];
         }
 
         return response()
@@ -481,21 +381,19 @@ class ProductController extends Controller
         if (Unit::where('unit', $unit)->where('id', '!=', $request->id)
             ->first())
         {
-            $message = ['warning' => 'This unit already exists.'];
+            $data = ['warning' => 'This unit already exists.'];
         }
         else
         {
-
             $data = Unit::find($request->id);
             $data->unit = $unit;
             $data->save();
 
-            $unitList = Unit::select("*")->orderBy("id", "desc")
-                ->get();
+            $data = ['success' => 'Unit successfully updated.'];
         }
 
         return response()
-            ->json($unitList, 200);
+            ->json($data, 200);
     }
 
     /**
@@ -504,12 +402,9 @@ class ProductController extends Controller
     public function unitDestroy($id)
     {
         Unit::find($id)->delete();
-
-        $unitList = Unit::select("*")->orderBy("id", "desc")
-            ->get();
-
+        $data = ['success' => 'Unit Successfully Deleted.'];
         return response()
-            ->json($unitList, 200);
+            ->json($data, 200);
     }
 
 }
