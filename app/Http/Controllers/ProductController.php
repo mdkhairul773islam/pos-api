@@ -43,7 +43,6 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-       $filename_path =  base64FormatingFileUplaod($request->photo, 'upload/');
        
        $product_name = trim($request->name);
         // generate product code
@@ -67,8 +66,12 @@ class ProductController extends Controller
             $data->sale_price = $request->sale_price;
             $data->status = $request->status;
             $data->unit_id = $request->unit_id;
-            $data->photo   = $filename_path;
             
+            if(!empty($request->photo)){
+                $filename_path =  base64FormatingFileUplaod($request->photo, 'upload/');
+                $data->photo   = $filename_path;
+            }
+
             $data->save();
             
             $data = ['success' => 'Product successfully added.'];
@@ -98,7 +101,7 @@ class ProductController extends Controller
     {
 
         $productName = trim($request->name);
-
+        
         if (Product::where('name', $productName)->where('id', '!=', $request->id)
             ->first())
         {
@@ -116,7 +119,16 @@ class ProductController extends Controller
             $data->sale_price = $request->sale_price;
             $data->status = $request->status;
             $data->unit_id = $request->unit_id;
-
+            
+            // file upload and unlink process 
+            if(!empty($request->new_photo)){
+                $filename_path =  base64FormatingFileUplaod($request->new_photo, 'upload/');
+                if(!empty($filename_path)){
+                    (!empty($data->photo) ? unlink($data->photo) : '');
+                    $data->photo   = $filename_path;
+                }
+            }
+            
             $data->save();
 
             $data = ['success' => 'Product successfully updated.'];
@@ -129,11 +141,16 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        if (Product::find($id)->delete())
-        {
+        $product = Product::find($id);
+        
+        if (!empty($product))
+        {   
+            (!empty($product->photo) ? unlink($product->photo) : '');
+            Product::find($id)->delete();
+
             $data = Product::select("*")->orderBy("id", "desc")
                 ->with('category', 'brand', 'unit')
-                ->get();
+                ->paginate(10);
         }
         else
         {
