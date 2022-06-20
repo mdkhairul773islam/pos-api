@@ -98,9 +98,30 @@ class WarehouseController extends Controller
      */
     public function update(Request $request, Warehouse $warehouse)
     {
-        $data = ['name'=>'Warehouse Update'];
-        return response() 
-        ->json($data, 200);
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required',
+            'address'   => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+            }else{
+
+                $data                   = Warehouse::find($warehouse);
+
+                $warehouse              = (!empty($request->prefix) ? $request->prefix.'-'.trim($request->name) : $request->name);
+                $data[0]->name             = $warehouse;
+                $data[0]->manager_name     = $request->manager_name;
+                $data[0]->mobile           = $request->mobile;
+                $data[0]->address          = $request->address;
+
+                $data[0]->save();
+                
+                $data = ['success' => 'Warehouse successfully updated.'];
+
+            return response()
+            ->json($data, 200);
+        } 
     }
 
     /**
