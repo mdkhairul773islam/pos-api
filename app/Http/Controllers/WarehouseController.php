@@ -96,7 +96,7 @@ class WarehouseController extends Controller
      * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Warehouse $warehouse)
+    public function update(Request $request, $warehouse)
     {
         $validator = Validator::make($request->all(), [
             'name'      => 'required',
@@ -110,13 +110,13 @@ class WarehouseController extends Controller
                 $data                   = Warehouse::find($warehouse);
 
                 $warehouse              = (!empty($request->prefix) ? $request->prefix.'-'.trim($request->name) : $request->name);
-                $data[0]->name             = $warehouse;
-                $data[0]->manager_name     = $request->manager_name;
-                $data[0]->mobile           = $request->mobile;
-                $data[0]->address          = $request->address;
+                $data->name             = $warehouse;
+                $data->manager_name     = $request->manager_name;
+                $data->mobile           = $request->mobile;
+                $data->address          = $request->address;
 
-                $data[0]->save();
-                
+                $data->save();
+
                 $data = ['success' => 'Warehouse successfully updated.'];
 
             return response()
@@ -130,10 +130,17 @@ class WarehouseController extends Controller
      * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Warehouse $warehouse)
+    public function destroy($warehouse)
     {
-        $data = ['name'=>'Warehouse destroy'];
-        return response()
-        ->json($data, 200);
+        if (Warehouse::find($warehouse)->delete())
+        {
+            $data = Warehouse::select("*")->orderBy("id", "desc")
+                ->get(10);
+        }
+        else
+        {
+            $data = ['warning' => 'Supplier successfully not deleted.'];
+        }
+        return response()->json($data, 200);
     }
 }
