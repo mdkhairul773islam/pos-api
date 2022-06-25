@@ -56,4 +56,5 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
     Route::get('/supplier-destroy/{id}', [App\Http\Controllers\SupplierController::class, 'destroy']);
     Route::get('/showroom-wise-supplier/{showroom_id}', [App\Http\Controllers\SupplierController::class, 'showroomWiseSupplier']);
    
+    Route::resource('warehouse', App\Http\Controllers\WarehouseController::class);
 });

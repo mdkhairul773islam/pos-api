@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\warehouse;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
+use Validator; 
 
 class WarehouseController extends Controller
 {
@@ -12,9 +13,13 @@ class WarehouseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        //
+    public function index(Request $request)
+    {   
+        $data = Warehouse::select("*")->orderBy("id", "desc")
+        ->paginate($request->per_page);
+
+        return response()
+        ->json($data, 200);
     }
 
     /**
@@ -34,17 +39,41 @@ class WarehouseController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required',
+            'mobile'    => 'required|unique:warehouses',
+            'address'   => 'required',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+            }else{
+                
+                $data                   = new Warehouse;
+                $warehouse              = (!empty($request->prefix) ? $request->prefix.'-'.trim($request->name) : $request->name);
+                $data->name             = $warehouse;
+                $data->manager_name     = $request->manager_name;
+                $data->mobile           = $request->mobile;
+                $data->address          = $request->address;
+
+                $data->save();
+
+                $data = Warehouse::select("*")->orderBy("id", "desc")
+                ->paginate(10);
+
+            return response()
+            ->json($data, 200);
+        } 
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\warehouse  $warehouse
+     * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Http\Response
      */
-    public function show(warehouse $warehouse)
+    public function show(Warehouse $warehouse)
     {
         //
     }
@@ -52,10 +81,10 @@ class WarehouseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\warehouse  $warehouse
+     * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Http\Response
      */
-    public function edit(warehouse $warehouse)
+    public function edit(Warehouse $warehouse)
     {
         //
     }
@@ -64,22 +93,54 @@ class WarehouseController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\warehouse  $warehouse
+     * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, warehouse $warehouse)
+    public function update(Request $request, $warehouse)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name'      => 'required',
+            'address'   => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+            }else{
+
+                $data                   = Warehouse::find($warehouse);
+
+                $warehouse              = (!empty($request->prefix) ? $request->prefix.'-'.trim($request->name) : $request->name);
+                $data->name             = $warehouse;
+                $data->manager_name     = $request->manager_name;
+                $data->mobile           = $request->mobile;
+                $data->address          = $request->address;
+
+                $data->save();
+
+                $data = ['success' => 'Warehouse successfully updated.'];
+
+            return response()
+            ->json($data, 200);
+        } 
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\warehouse  $warehouse
+     * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Http\Response
      */
-    public function destroy(warehouse $warehouse)
+    public function destroy($warehouse)
     {
-        //
+        if (Warehouse::find($warehouse)->delete())
+        {
+            $data = Warehouse::select("*")->orderBy("id", "desc")
+                ->get(10);
+        }
+        else
+        {
+            $data = ['warning' => 'Supplier successfully not deleted.'];
+        }
+        return response()->json($data, 200);
     }
 }

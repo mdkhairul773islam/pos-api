@@ -15,6 +15,11 @@ class CreateWarehousesTable extends Migration
     {
         Schema::create('warehouses', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
+            $table->string('manager_name');
+            $table->string('mobile');
+            $table->longText('address');
+            $table->softDeletes('deleted_at');
             $table->timestamps();
         });
     }
