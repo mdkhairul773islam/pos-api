@@ -131,10 +131,13 @@ class WarehouseController extends Controller
      */
     public function destroy($warehouse)
     {
+        return response()->json($warehouse, 200);
         if (Warehouse::find($warehouse)->delete())
         {
-            $data = Warehouse::select("*")->orderBy("id", "desc")
+            $warehouse = Warehouse::select("*")->orderBy("id", "desc")
                 ->get(10);
+
+            $data = ['success' => 'Unit Successfully Deleted.', 'data'=>$warehouse];
         }
         else
         {
