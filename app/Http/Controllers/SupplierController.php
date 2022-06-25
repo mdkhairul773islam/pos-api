@@ -127,7 +127,9 @@ class SupplierController extends Controller
     {
         if (Party::find($id)->delete())
         {
-          $data = ['success' => 'Supplier successfully deleted.'];
+          $data = Party::where('party_type', 'supplier')->select(['id', 'address', 'contact_person', 'name', 'mobile', 'initial_balance'])
+          ->orderBy("id", "desc")
+          ->paginate(10);
         }
         else
         {
