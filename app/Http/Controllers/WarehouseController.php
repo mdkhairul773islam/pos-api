@@ -47,7 +47,9 @@ class WarehouseController extends Controller
         ]);
         
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 404);
+            $data = ['validator' =>'Warehouse validator error.', 'message' => $validator->errors()];
+            return response()->json($data, 200);
+            
             }else{
                 
                 $data                   = new Warehouse;
@@ -57,11 +59,8 @@ class WarehouseController extends Controller
                 $data->mobile           = $request->mobile;
                 $data->address          = $request->address;
 
-                $data->save();
-
-                $data = Warehouse::select("*")->orderBy("id", "desc")
-                ->paginate(10);
-
+                $data->save() ? $data = ['success'=>'Warehouse Successfully add.'] : $data = ['warning'=>'Warehouse add somthing went wrong.'];
+                
             return response()
             ->json($data, 200);
         } 
