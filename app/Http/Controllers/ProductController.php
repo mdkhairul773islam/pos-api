@@ -14,7 +14,7 @@ class ProductController extends Controller
     public function __construct()
     {
         //$this->middleware('auth');
-        
+
     }
 
     public function index(Request $request)
@@ -42,7 +42,7 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-       
+
        $product_name = trim($request->name);
         // generate product code
         $code = rand(100000, 999999);
@@ -65,17 +65,17 @@ class ProductController extends Controller
             $data->sale_price = $request->sale_price;
             $data->status = $request->status;
             $data->unit_id = $request->unit_id;
-            
+
             if(!empty($request->photo)){
                 $filename_path =  base64FormatingFileUplaod($request->photo, 'upload/');
                 $data->photo   = $filename_path;
             }
 
             $data->save();
-            
+
             $data = ['success' => 'Product successfully added.'];
-        } 
-        
+        }
+
         return response()
             ->json($data, 200);
 
@@ -86,7 +86,7 @@ class ProductController extends Controller
      */
     public function edit($id)
     {
-        // get product info 
+        // get product info
         $data = Product::find($id);
         return response()
             ->json($data, 200);
@@ -99,7 +99,7 @@ class ProductController extends Controller
     {
 
         $productName = trim($request->name);
-        
+
         if (Product::where('name', $productName)->where('id', '!=', $request->id)
             ->first())
         {
@@ -117,8 +117,8 @@ class ProductController extends Controller
             $data->sale_price = $request->sale_price;
             $data->status = $request->status;
             $data->unit_id = $request->unit_id;
-            
-            // file upload and unlink process 
+
+            // file upload and unlink process
             if(!empty($request->new_photo)){
                 $filename_path =  base64FormatingFileUplaod($request->new_photo, 'upload/');
                 if(!empty($filename_path)){
@@ -126,7 +126,7 @@ class ProductController extends Controller
                     $data->photo   = $filename_path;
                 }
             }
-            
+
             $data->save();
 
             $data = ['success' => 'Product successfully updated.'];
@@ -140,9 +140,9 @@ class ProductController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
-        
+
         if (!empty($product))
-        {   
+        {
             (!empty($product->photo) ? unlink($product->photo) : '');
             Product::find($id)->delete();
 

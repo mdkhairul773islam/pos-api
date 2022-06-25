@@ -10,7 +10,7 @@ class SupplierController extends Controller
     public function __construct()
     {
         //$this->middleware('auth');
-        
+
     }
 
     /**
@@ -127,8 +127,7 @@ class SupplierController extends Controller
     {
         if (Party::find($id)->delete())
         {
-            $data = Party::select("*")->orderBy("id", "desc")
-                ->get();
+          $data = ['success' => 'Supplier successfully deleted.'];
         }
         else
         {
