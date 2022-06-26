@@ -97,28 +97,30 @@ class WarehouseController extends Controller
      * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $warehouse)
+    public function update(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'name'      => 'required',
+            'mobile'    => 'required',
             'address'   => 'required',
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 404);
+            $data = ['validator' =>'Warehouse validator error.', 'message' => $validator->errors()];
+            return response()->json($data, 200);
+
             }else{
 
-                $data                   = Warehouse::find($warehouse);
+                $data                   = Warehouse::find($request->id);
 
-                $warehouse              = (!empty($request->prefix) ? $request->prefix.'-'.trim($request->name) : $request->name);
-                $data->name             = $warehouse;
+                $data->name             = $request->name;;
                 $data->manager_name     = $request->manager_name;
                 $data->mobile           = $request->mobile;
                 $data->address          = $request->address;
 
                 $data->save();
 
-                $data = ['success' => 'Warehouse successfully updated.'];
+                $data->save() ? $data = ['success'=>'Warehouse Successfully updated.'] : $data = ['warning'=>'Warehouse update somthing went wrong.'];
 
             return response()
             ->json($data, 200);
@@ -137,12 +139,11 @@ class WarehouseController extends Controller
         {
             $warehouse = Warehouse::select("*")->orderBy("id", "desc")
                 ->get(10);
-
-            $data = ['success' => 'Unit Successfully Deleted.', 'data'=>$warehouse];
+            $data = ['success' => 'Warehouse Successfully Deleted.', 'data'=>$warehouse];
         }
         else
         {
-            $data = ['warning' => 'Supplier successfully not deleted.'];
+            $data = ['warning' => 'Warehouse successfully not deleted.'];
         }
         return response()->json($data, 200);
     }
