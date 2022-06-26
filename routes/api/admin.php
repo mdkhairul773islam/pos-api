@@ -55,7 +55,13 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
     Route::post('/supplier-update', [App\Http\Controllers\SupplierController::class, 'update']);
     Route::get('/supplier-destroy/{id}', [App\Http\Controllers\SupplierController::class, 'destroy']);
     Route::get('/showroom-wise-supplier/{showroom_id}', [App\Http\Controllers\SupplierController::class, 'showroomWiseSupplier']);
+
+    Route::any('/warehouse', [App\Http\Controllers\WarehouseController::class, 'index']);
+    Route::get('/warehouse-edit/{id}', [App\Http\Controllers\WarehouseController::class, 'edit']);
+    Route::post('/warehouse-store', [App\Http\Controllers\WarehouseController::class, 'store']);
+    Route::post('/warehouse-update', [App\Http\Controllers\WarehouseController::class, 'update']);
+    Route::get('/warehouse-destroy/{id}', [App\Http\Controllers\WarehouseController::class, 'destroy']);
    
-   // Route::get('warehouse-destroy/{id}', App\Http\Controllers\WarehouseController::class, 'destroy');
-    Route::resource('warehouse', App\Http\Controllers\WarehouseController::class);
+    //Route::resource('warehouse', App\Http\Controllers\WarehouseController::class);
+    //Route::delete('warehouse', Appp\Http\Controllers\WarehouseController::calsss, 'destroy');
 });

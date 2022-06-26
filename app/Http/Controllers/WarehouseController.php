@@ -83,9 +83,11 @@ class WarehouseController extends Controller
      * @param  \App\Models\Warehouse  $warehouse
      * @return \Illuminate\Http\Response
      */
-    public function edit(Warehouse $warehouse)
+    public function edit($warehouse)
     {
-        //
+        $data = Warehouse::find($warehouse);
+        return response()
+            ->json($data, 200);
     }
 
     /**
@@ -131,7 +133,6 @@ class WarehouseController extends Controller
      */
     public function destroy($warehouse)
     {
-        return response()->json($warehouse, 200);
         if (Warehouse::find($warehouse)->delete())
         {
             $warehouse = Warehouse::select("*")->orderBy("id", "desc")
