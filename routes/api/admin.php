@@ -50,6 +50,7 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
 
     //supplier module
     Route::any('/supplier', [App\Http\Controllers\SupplierController::class, 'index']);
+    Route::get('/supplier-list', [App\Http\Controllers\SupplierController::class, 'supplierList']);
     Route::post('/supplier-store', [App\Http\Controllers\SupplierController::class, 'store']);
     Route::get('/supplier-edit/{id}', [App\Http\Controllers\SupplierController::class, 'edit']);
     Route::post('/supplier-update', [App\Http\Controllers\SupplierController::class, 'update']);
@@ -58,6 +59,7 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
 
     // Warehouse module
     Route::any('/warehouse', [App\Http\Controllers\WarehouseController::class, 'index']);
+    Route::get('/warehouse-list', [App\Http\Controllers\WarehouseController::class, 'warehouseList']);
     Route::post('/warehouse-store', [App\Http\Controllers\WarehouseController::class, 'store']);
     Route::get('/warehouse-edit/{id}', [App\Http\Controllers\WarehouseController::class, 'edit']);
     Route::post('/warehouse-update', [App\Http\Controllers\WarehouseController::class, 'update']);

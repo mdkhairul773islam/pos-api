@@ -23,6 +23,20 @@ class WarehouseController extends Controller
     }
 
     /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function warehouseList()
+    {   
+        $data = Warehouse::select("id as value", "name as label", "mobile")->orderBy("id", "desc")
+        ->get();
+
+        return response()
+        ->json($data, 200);
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response

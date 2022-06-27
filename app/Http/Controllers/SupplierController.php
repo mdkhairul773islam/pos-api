@@ -25,6 +25,20 @@ class SupplierController extends Controller
             ->json($data, 200);
     }
 
+        /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function supplierList()
+    {   
+        $data = Party::select("id as value", "name as label", "mobile")->orderBy("id", "desc")
+        ->get();
+
+        return response()
+        ->json($data, 200);
+    }
+
     /**
      * Display a showroom wise supplier list of the resource.
      */
