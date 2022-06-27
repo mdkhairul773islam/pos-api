@@ -59,8 +59,13 @@ class SupplierController extends Controller
      */
     public function store(Request $request)
     {
-        $supplier_code = "SI-".date('d').random_int(1000, 9999);
         $data = new Party;
+
+        $supplier_code = "SI-".date('d').random_int(1000, 9999);
+
+        if (Party::where('code', $supplier_code)->exists()) {
+            $supplier_code = "SI-".date('d').random_int(1000, 9999);
+        }
 
         $data->created = date('Y-m-d');
         $data->code = $supplier_code;
