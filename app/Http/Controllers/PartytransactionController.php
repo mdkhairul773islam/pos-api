@@ -14,7 +14,7 @@ class PartytransactionController extends Controller
      */
     public function index()
     {
-        //
+        return "index";
     }
 
     /**
@@ -35,7 +35,7 @@ class PartytransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return "store";
     }
 
     /**
@@ -44,9 +44,9 @@ class PartytransactionController extends Controller
      * @param  \App\Models\Partytransaction  $partytransaction
      * @return \Illuminate\Http\Response
      */
-    public function show(Partytransaction $partytransaction)
+    public function show($partytransaction)
     {
-        //
+        return "show";
     }
 
     /**
@@ -55,9 +55,9 @@ class PartytransactionController extends Controller
      * @param  \App\Models\Partytransaction  $partytransaction
      * @return \Illuminate\Http\Response
      */
-    public function edit(Partytransaction $partytransaction)
+    public function edit($partytransaction)
     {
-        //
+        return "edit";
     }
 
     /**
@@ -67,9 +67,9 @@ class PartytransactionController extends Controller
      * @param  \App\Models\Partytransaction  $partytransaction
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Partytransaction $partytransaction)
+    public function update(Request $request)
     {
-        //
+        return "update";
     }
 
     /**
@@ -78,8 +78,8 @@ class PartytransactionController extends Controller
      * @param  \App\Models\Partytransaction  $partytransaction
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Partytransaction $partytransaction)
+    public function destroy($partytransaction)
     {
-        //
+        return "destriy";
     }
 }

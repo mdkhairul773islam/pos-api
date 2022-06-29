@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Party;
+use App\Models\Partytransaction;
 use Illuminate\Http\Request;
 use DB;
 
@@ -32,7 +33,7 @@ class SupplierController extends Controller
      */
     public function supplierList()
     {   
-        $data = Party::select("id as value", "name as label", "mobile")->orderBy("id", "desc")
+        $data = Party::select("id as value", "code","name as label", "mobile")->orderBy("id", "desc")
         ->get();
 
         return response()
@@ -156,5 +157,28 @@ class SupplierController extends Controller
         }
         return response()->json($data, 200);
 
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\Party  $party
+     * @param  \App\Models\Partytransaction  $party
+     * @return \Illuminate\Http\Response
+     */
+    public function supplierTransactionDetails($code)
+    {
+        $supplier_code = $code;
+        $data = [];
+        if(!empty($supplier_code)){
+            $supplier_info = Party::where("code", $code)->select('initial_balance')->first();
+            $party_transactions = [];
+            if(!empty($supplier_info)){
+                $party_transactions = Partytransaction::where('party_code', $code)->get();
+            }
+
+        }
+
+        return response()->json([$data, $party_transactions], 200);
     }
 }

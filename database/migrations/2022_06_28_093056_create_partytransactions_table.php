@@ -27,6 +27,7 @@ class CreatePartytransactionsTable extends Migration
             $table->longText('remark')->nullable();
             $table->string('paid_by')->nullable();
             $table->string('status');
+            $table->softDeletes('deleted_at');
             $table->timestamps();
         });
     }
