@@ -11,4 +11,10 @@ class Party extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = ['name', 'party_type', 'initial_balance'];
+
+    public function Partytransaction()
+    {  
+        return $this->hasMany(Partytransaction::class, 'party_code', 'code');
+    }
 }
+

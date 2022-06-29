@@ -168,17 +168,7 @@ class SupplierController extends Controller
      */
     public function supplierTransactionDetails($code)
     {
-        $supplier_code = $code;
-        $data = [];
-        if(!empty($supplier_code)){
-            $supplier_info = Party::where("code", $code)->select('initial_balance')->first();
-            $party_transactions = [];
-            if(!empty($supplier_info)){
-                $party_transactions = Partytransaction::where('party_code', $code)->get();
-            }
-
-        }
-
-        return response()->json([$data, $party_transactions], 200);
+        $data = get_supplier_balance($code);
+        return response()->json($data, 200);
     }
 }

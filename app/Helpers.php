@@ -1,4 +1,6 @@
 <?php
+use App\Models\Party;
+use App\Models\Partytransaction;
 
 if (!function_exists('uploadFile')) {
     function uploadFile($photo = '', $path = '')
@@ -47,5 +49,56 @@ if(!function_exists('base64FormatingFileUplaod')){
         file_put_contents($file_name_path, base64_decode($file));
 
         return $file_name_path;
+    }
+}
+
+// get cash client
+if (!function_exists('get_supplier_balance')) {
+    function get_supplier_balance($code = null)
+    {
+        $data = [];
+        if(!empty($code)){
+            // define default amount
+            $initital_balance = $debit = $credit = $balance = $comission = $remission = 0;
+            // get supplier info 
+            $supplier_info = Party::with('Partytransaction')->where("code", $code)->first();
+            if(!empty($supplier_info->partytransaction)){
+                foreach($supplier_info->partytransaction as $row){
+                    $credit     += $row->credit;
+                    $debit      += $row->debit;
+                    $comission  += $row->comission;
+                    $remission  += $row->remission;  
+                }
+            } 
+
+            $initital_balance = (!empty($supplier_info->initial_balance) ? $supplier_info->initial_balance : 0);
+            $credit           = $credit;
+            $debit            = $debit + $remission;
+            
+            // get balance
+            if ($initital_balance < 0) {
+                $balance = $debit - (abs($initital_balance) + $credit);
+            } else {
+                $balance = ($initital_balance + $debit) - $credit;
+            }
+            $data['code']            = $supplier_info->code;
+            $data['name']            = $supplier_info->name;
+            $data['initial_balance'] = $initital_balance;
+            $data['balance']         = $balance;
+            $data['credit']          = $credit;
+            $data['debit']           = $debit;
+            $data['status']          = ($balance <= 0 ? "Payable" : "Receivable");
+
+        }else {
+            $data['code']            = '';
+            $data['name']            = '';
+            $data['initial_balance'] = 0;
+            $data['debit']           = 0;
+            $data['credit']          = 0;
+            $data['balance']         = 0;
+            $data['status']          = "Receivable";
+        }
+
+        return $data;
     }
 }
