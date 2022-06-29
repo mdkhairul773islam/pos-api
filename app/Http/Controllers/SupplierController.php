@@ -2,7 +2,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Party;
-use App\Models\Partytransaction;
 use Illuminate\Http\Request;
 use DB;
 
@@ -163,12 +162,11 @@ class SupplierController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Party  $party
-     * @param  \App\Models\Partytransaction  $party
      * @return \Illuminate\Http\Response
      */
     public function supplierTransactionDetails($code)
     {
-        $data = get_supplier_balance($code);
+        $data = getSupplierBalance($code);
         return response()->json($data, 200);
     }
 }
