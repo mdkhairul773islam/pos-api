@@ -16,7 +16,7 @@ class CreatePartytransactionsTable extends Migration
         Schema::create('partytransactions', function (Blueprint $table) {
             $table->id();
             $table->date('transaction_at');
-            $table->string('warehouse_code');
+            $table->string('warehouse_id');
             $table->string('party_code');
             $table->string('relation');
             $table->decimal('credit', 10,2);

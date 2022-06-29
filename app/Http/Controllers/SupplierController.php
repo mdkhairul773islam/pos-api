@@ -73,7 +73,7 @@ class SupplierController extends Controller
         $data->contact_person = $request->contact_person;
         $data->mobile = $request->mobile;
         $data->party_type = 'supplier';
-        $data->showroom_id = '0001';
+        $data->warehouse_id = $request->warehouse_id;
         $data->address = $request->address;
         $data->remarks = $request->remarks;
         $data->initial_balance = ($request->balance_status == 'payable' ? '-' : '') . $request->initial_balance;

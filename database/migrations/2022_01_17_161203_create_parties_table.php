@@ -24,7 +24,7 @@ class CreatePartiesTable extends Migration
             $table->string('remarks')->nullable();
             $table->decimal('initial_balance', 10, 2);
             $table->string('party_type')->nullable();
-            $table->string('showroom_id')->nullable();
+            $table->string('warehouse_id')->nullable();
             $table->string('status')->default('active');
             $table->softDeletes('deleted_at');
             $table->timestamps();
