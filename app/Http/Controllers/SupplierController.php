@@ -30,9 +30,9 @@ class SupplierController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function supplierList()
+    public function supplierList($warehouse_id)
     {   
-        $data = Party::select("id as value", "code","name as label", "mobile")->orderBy("id", "desc")
+        $data = Party::where('warehouse_id', $warehouse_id)->select("id as value", "code","name as label", "mobile")->orderBy("id", "desc")
         ->get();
 
         return response()
