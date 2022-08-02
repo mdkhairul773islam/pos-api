@@ -52,7 +52,7 @@ class PartytransactionController extends Controller
         }
         $data->relation = $invoice;
 
-        if ($request->transaction_type == 'payment') {
+        if ($request->transaction_type == 'paid') {
             $data->debit     = $request->payment;
             $data->comission = $request->comission;
         } else {
