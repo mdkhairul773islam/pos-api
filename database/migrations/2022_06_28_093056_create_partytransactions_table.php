@@ -22,8 +22,8 @@ class CreatePartytransactionsTable extends Migration
             $table->decimal('credit', 10,2);
             $table->decimal('debit', 10,2);
             $table->string('transaction_method');
-            $table->decimal('remission', 10,2);
-            $table->decimal('comission', 10,2);
+            $table->decimal('remission', 10,2)->nullable();
+            $table->decimal('comission', 10,2)->nullable();
             $table->longText('remark')->nullable();
             $table->string('paid_by')->nullable();
             $table->string('status');
