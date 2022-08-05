@@ -81,12 +81,16 @@ if (!function_exists('getSupplierBalance')) {
             } else {
                 $balance = ($initital_balance + $debit) - $credit;
             }
+
+            $balance = number_format($balance, 2,".","");
+
             $data['code']            = $supplier_info->code;
             $data['name']            = $supplier_info->name;
             $data['initial_balance'] = $initital_balance;
-            $data['balance']         = $balance;
             $data['credit']          = $credit;
             $data['debit']           = $debit;
+            $data['balance']         = abs($balance);
+            $data['real_balance']    = $balance;
             $data['status']          = ($balance <= 0 ? "Payable" : "Receivable");
 
         }else {
@@ -96,6 +100,7 @@ if (!function_exists('getSupplierBalance')) {
             $data['debit']           = 0;
             $data['credit']          = 0;
             $data['balance']         = 0;
+            $data['real_balance']    = 0;
             $data['status']          = "Receivable";
         }
 

@@ -51,22 +51,27 @@ class PartytransactionController extends Controller
             $invoice = rand(100000, 999999);
         }
         $data->relation = $invoice;
-
-        if ($request->transaction_type == 'paid') {
-            $data->debit     = $request->payment;
-            $data->comission = $request->comission;
-        } else {
-            $data->debit     = 0;
-            $data->comission = 0;
+        
+        if($request->balance_status== 'Payable'){
+            if($request->transaction_type == 'receive'){
+                $data['credit'] = $request->payment;
+                $data['debit'] = 0;
+            }else{
+                $data['debit'] = $request->payment;
+                $data['credit'] = 0;
+            }
+        }else{
+            if($request->transaction_type == 'receive'){
+                $data['debit'] = 0;
+                $data['credit'] = $request->payment;
+            }else{
+                $data['credit'] = 0;
+                $data['debit'] = $request->payment;
+            }
         }
 
-        if ($request->transaction_type == 'receive') {
-            $data->credit    = $request->payment;
-            $data->remission = $request->remission;
-        } else {
-            $data->credit     = 0;
-            $data->remission  = 0;
-        } 
+        $data->remission = (!empty($request->remission) ? $request->remission : 0); 
+        $data->comission = (!empty($request->comission) ? $request->comission : 0);
 
         $data->status = "transaction";
 
