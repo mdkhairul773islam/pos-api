@@ -25,6 +25,7 @@ class CreatePartytransactionsTable extends Migration
             $table->decimal('remission', 10,2)->default('0');
             $table->decimal('comission', 10,2)->default('0');
             $table->longText('remark')->nullable();
+            $table->string('transaction_by');
             $table->string('paid_by')->nullable();
             $table->string('status');
             $table->softDeletes('deleted_at');

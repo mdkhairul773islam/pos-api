@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Partytransaction;
+use App\Models\Party;
+use App\Models\Warehouse;
 use Illuminate\Http\Request;
 
 class PartytransactionController extends Controller
@@ -12,9 +14,21 @@ class PartytransactionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return "index";
+        $data =  /* Partytransaction::with("party")
+            //->select(['id', 'transaction_at', 'relation', 'credit', 'debit', 'remission', 'comission'])
+            ->orderBy("id", "desc")
+            ->paginate($request->per_page);  */
+
+            Partytransaction::addSelect(['names' => Party::select('name')
+            ->whereColumn('code', 'partytransactions.party_code')])
+            ->addSelect(['warehouse' => Warehouse::select('name')
+            ->whereColumn('id', 'partytransactions.warehouse_id')])
+            ->orderBy("id", "desc")
+            ->paginate($request->per_page); 
+        return response()
+            ->json($data, 200);
     }
 
     /**
@@ -73,7 +87,8 @@ class PartytransactionController extends Controller
         $data->remission = (!empty($request->remission) ? $request->remission : 0); 
         $data->comission = (!empty($request->comission) ? $request->comission : 0);
 
-        $data->status = "transaction";
+        $data->status           = "transaction";
+        $data->transaction_by   = "suplier";
 
         $data->save();
 
