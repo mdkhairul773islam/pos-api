@@ -80,9 +80,6 @@ class PartytransactionController extends Controller
             }
         }
 
-        $data->remission = (!empty($request->remission) ? $request->remission : 0); 
-        $data->comission = (!empty($request->comission) ? $request->comission : 0);
-
         $data->status           = "transaction";
         $data->transaction_by   = "suplier";
 

@@ -59,21 +59,19 @@ if (!function_exists('getSupplierBalance')) {
         $data = [];
         if(!empty($code)){
             // define default amount
-            $initital_balance = $debit = $credit = $balance = $comission = $remission = 0;
+            $initital_balance = $debit = $credit = $balance = 0;
             // get supplier info 
             $supplier_info = Party::with('Partytransaction')->where("code", $code)->first();
             if(!empty($supplier_info->partytransaction)){
                 foreach($supplier_info->partytransaction as $row){
                     $credit     += $row->credit;
                     $debit      += $row->debit;
-                    $comission  += $row->comission;
-                    $remission  += $row->remission;  
                 }
             } 
 
             $initital_balance = (!empty($supplier_info->initial_balance) ? $supplier_info->initial_balance : 0);
             $credit           = $credit;
-            $debit            = $debit + $remission;
+            $debit            = $debit;
             
             // get balance
             if ($initital_balance < 0) {
@@ -115,15 +113,13 @@ if (!function_exists('getClientBalance')) {
         $data = [];
         if(!empty($code)){
             // define default amount
-            $initital_balance = $debit = $credit = $balance = $comission = $remission = 0;
+            $initital_balance = $debit = $credit = $balance = 0;
             // get supplier info 
             $supplier_info = Party::with('Partytransaction')->where("code", $code)->first();
             if(!empty($supplier_info->partytransaction)){
                 foreach($supplier_info->partytransaction as $row){
                     $credit     += $row->credit;
                     $debit      += $row->debit;
-                    $comission  += $row->comission;
-                    $remission  += $row->remission;  
                 }
             } 
 
