@@ -16,14 +16,10 @@ class PartytransactionController extends Controller
      */
     public function index(Request $request)
     {
-        $data =  /* Partytransaction::with("party")
-            //->select(['id', 'transaction_at', 'relation', 'credit', 'debit', 'remission', 'comission'])
-            ->orderBy("id", "desc")
-            ->paginate($request->per_page);  */
-
-            Partytransaction::addSelect(['names' => Party::select('name')
+        $data =
+            Partytransaction::addSelect(['name' => Party::select('name')
             ->whereColumn('code', 'partytransactions.party_code')])
-            ->addSelect(['warehouse' => Warehouse::select('name')
+            ->addSelect(['warehouse_name' => Warehouse::select('name')
             ->whereColumn('id', 'partytransactions.warehouse_id')])
             ->orderBy("id", "desc")
             ->paginate($request->per_page); 
