@@ -21,7 +21,8 @@ class PartytransactionController extends Controller
             ->whereColumn('code', 'partytransactions.party_code')])
             ->addSelect(['warehouse_name' => Warehouse::select('name')
             ->whereColumn('id', 'partytransactions.warehouse_id')])
-            ->orderBy("id", "desc")
+            ->where('partytransactions.warehouse_id', $request->warehouse_id)
+			->orderBy("id", "desc")
             ->paginate($request->per_page); 
         return response()
             ->json($data, 200);
