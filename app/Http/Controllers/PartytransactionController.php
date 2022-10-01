@@ -15,13 +15,27 @@ class PartytransactionController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {
+    {   
+        $where = [];
+        if(!empty($request->from_date)){
+            $where[] = ['partytransactions.transaction_at','>=', $request->from_date];
+        }
+        if(!empty($request->to_date)){
+            $where[] = ['partytransactions.transaction_at','<=', $request->to_date];
+        }
+        if(!empty($request->warehouse_id)){
+            $where[] = ['partytransactions.warehouse_id','=',$request->warehouse_id];
+        } 
+        if(!empty($request->party_code)){
+            $where[] = ['partytransactions.party_code','=',$request->party_code];
+        } 
+
         $data =
             Partytransaction::addSelect(['name' => Party::select('name')
             ->whereColumn('code', 'partytransactions.party_code')])
             ->addSelect(['warehouse_name' => Warehouse::select('name')
             ->whereColumn('id', 'partytransactions.warehouse_id')])
-            ->where('partytransactions.warehouse_id', $request->warehouse_id)
+            ->where($where)
 			->orderBy("id", "desc")
             ->paginate($request->per_page); 
         return response()
