@@ -6,6 +6,7 @@ use App\Models\Partytransaction;
 use App\Models\Party;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Cache\Factory;
 
 class PartytransactionController extends Controller
 {
@@ -29,7 +30,7 @@ class PartytransactionController extends Controller
         if(!empty($request->party_code)){
             $where[] = ['partytransactions.party_code','=',$request->party_code];
         } 
-
+        
         $data =
             Partytransaction::addSelect(['name' => Party::select('name')
             ->whereColumn('code', 'partytransactions.party_code')])
@@ -42,7 +43,7 @@ class PartytransactionController extends Controller
             ->json($data, 200);
     }
 
-    /**
+    /** 
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -139,15 +140,24 @@ class PartytransactionController extends Controller
     {
         return "update";
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Partytransaction  $partytransaction
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($partytransaction)
+    public function destroy($id)
     {
-        return "destriy";
+        if (Partytransaction::find($id)->delete())
+        {
+            $data =
+            Partytransaction::addSelect(['name' => Party::select('name')
+            ->whereColumn('code', 'partytransactions.party_code')])
+            ->addSelect(['warehouse_name' => Warehouse::select('name')
+            ->whereColumn('id', 'partytransactions.warehouse_id')])
+			->orderBy("id", "desc")
+            ->paginate(12); 
+        return response()
+            ->json($data, 200);
+        }
+        else
+        {
+            $data = ['warning' => 'Supplier Transaction successfully not deleted.'];
+        }
+        return response()->json($data, 200);
     }
 }

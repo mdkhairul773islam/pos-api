@@ -155,7 +155,6 @@ class SupplierController extends Controller
             $data = ['warning' => 'Supplier successfully not deleted.'];
         }
         return response()->json($data, 200);
-
     }
 
     /**

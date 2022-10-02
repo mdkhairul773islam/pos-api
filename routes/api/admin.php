@@ -68,6 +68,6 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
     Route::get('/supplier-transaction-details/{code}', [App\Http\Controllers\SupplierController::class, 'supplierTransactionDetails']);
     
     //suplier transaction module
-    Route::resource('/party-transaction', App\Http\Controllers\PartytransactionController::class);
-    //Route::resource('warehouse', App\Http\Controllers\WarehouseController::class);
+    Route::resource('party-transaction', App\Http\Controllers\PartytransactionController::class);
+    Route::get('party-transaction-destroy/{id}', [App\Http\Controllers\PartytransactionController::class, 'destroy']);
 });
