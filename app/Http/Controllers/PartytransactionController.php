@@ -6,7 +6,6 @@ use App\Models\Partytransaction;
 use App\Models\Party;
 use App\Models\Warehouse;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Cache\Factory;
 
 class PartytransactionController extends Controller
 {
@@ -18,19 +17,25 @@ class PartytransactionController extends Controller
     public function index(Request $request)
     {   
         $where = [];
-        if(!empty($request->from_date)){
-            $where[] = ['partytransactions.transaction_at','>=', $request->from_date];
+        
+        if(!empty($request->from_date) || !empty($request->to_date)){
+            if(!empty($request->from_date)){
+                $where[] = ['partytransactions.transaction_at','>=', $request->from_date];
+            }
+            if(!empty($request->to_date)){
+                $where[] = ['partytransactions.transaction_at','<=', $request->to_date];
+            }
+        }else{
+            $where[] = ['partytransactions.transaction_at','=', date("Y-m-d")];
         }
-        if(!empty($request->to_date)){
-            $where[] = ['partytransactions.transaction_at','<=', $request->to_date];
-        }
+
         if(!empty($request->warehouse_id)){
             $where[] = ['partytransactions.warehouse_id','=',$request->warehouse_id];
         } 
         if(!empty($request->party_code)){
             $where[] = ['partytransactions.party_code','=',$request->party_code];
-        } 
-        
+        }
+
         $data =
             Partytransaction::addSelect(['name' => Party::select('name')
             ->whereColumn('code', 'partytransactions.party_code')])
