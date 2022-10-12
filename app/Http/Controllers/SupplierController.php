@@ -9,20 +9,50 @@ class SupplierController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware('auth');
-
+        $this->middleware('auth');
     }
 
-    /**
+    /** 
      * Display a listing of the resource.
      */
     public function index(Request $request)
     {
-        $data = Party::where('party_type', 'supplier')->select(['id', 'address', 'contact_person', 'name', 'mobile', 'initial_balance'])
-            ->orderBy("id", "desc")
+         $data = Party::where('party_type', 'supplier')
+            ->with('partytransaction')
+            //->orderBy('id', 'DESC')
+            ->orderBy("name", "ASC")
             ->paginate($request->per_page);
+
+            /* start calculation suplier final balance */
+            if(!empty($data)){
+                foreach($data as $key => $row){
+                    $credit= 0;
+                    $debit= 0;
+                    if(!empty($row->partytransaction)){
+                        foreach($row->partytransaction as $amount){
+                            $credit += $amount->credit;
+                            $debit  += $amount->debit;
+                        }
+                    }
+                    $initital_balance = (!empty($row->initial_balance) ? $row->initial_balance : 0);
+                    $credit           = $credit;
+                    $debit            = $debit;
+
+                    if ($initital_balance < 0) {
+                        $balance = $debit - (abs($initital_balance) + $credit);
+                    } else {
+                        $balance = ($initital_balance + $debit) - $credit;
+                    }
+
+                    $balance = number_format($balance, 2,".","");
+                    $data[$key]['status']          = ($balance <= 0 ? "Payable" : "Receivable");
+                    $data[$key]['balance'] = $balance;
+                }
+            }
+            /* end calculation suplier final balance  */
+         
         return response()
-            ->json($data, 200);
+            ->json($data, 200);  
     }
 
         /**

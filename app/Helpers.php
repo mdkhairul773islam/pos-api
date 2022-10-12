@@ -61,7 +61,7 @@ if (!function_exists('getSupplierBalance')) {
             // define default amount
             $initital_balance = $debit = $credit = $balance = 0;
             // get supplier info 
-            $supplier_info = Party::with('Partytransaction')->where("code", $code)->first();
+            $supplier_info = Party::with('partytransaction')->where("code", $code)->first();
             if(!empty($supplier_info->partytransaction)){
                 foreach($supplier_info->partytransaction as $row){
                     $credit     += $row->credit;

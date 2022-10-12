@@ -12,7 +12,7 @@ class Party extends Model
 
     protected $fillable = ['name', 'party_type', 'initial_balance'];
 
-    public function Partytransaction()
+    public function partytransaction()
     {  
         return $this->hasMany(Partytransaction::class, 'party_code', 'code');
     }
