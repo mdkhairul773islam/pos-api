@@ -120,7 +120,9 @@ class PartytransactionController extends Controller
      */
     public function show($partytransaction)
     {
-        return "show";
+        $data = Partytransaction::with("party")->find($partytransaction);
+        return response()
+        ->json($data, 200);
     }
 
     /**
