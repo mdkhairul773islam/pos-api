@@ -23,18 +23,18 @@ class SupplierController extends Controller
             ->orderBy("name", "ASC")
             ->paginate($request->per_page);
 
-            /* start calculation suplier final balance */
+            /* start calculation for suplier final balance */
             if(!empty($data)){
                 foreach($data as $key => $row){
-                    $credit= 0;
-                    $debit= 0;
+                    $credit = 0;
+                    $debit  = 0;
                     if(!empty($row->partytransaction)){
                         foreach($row->partytransaction as $amount){
-                            $credit += $amount->credit;
-                            $debit  += $amount->debit;
+                            $credit = $amount->credit;
+                            $debit  = $amount->debit;
                         }
                     }
-                    $initital_balance = (!empty($row->initial_balance) ? $row->initial_balance : 0);
+                    $initital_balance = $row->initial_balance;
                     $credit           = $credit;
                     $debit            = $debit;
 
@@ -45,11 +45,11 @@ class SupplierController extends Controller
                     }
 
                     $balance = number_format($balance, 2,".","");
-                    $data[$key]['status']          = ($balance <= 0 ? "Payable" : "Receivable");
+                    $data[$key]['status']  = ($balance <= 0 ? "Payable" : "Receivable");
                     $data[$key]['balance'] = $balance;
                 }
             }
-            /* end calculation suplier final balance  */
+            /* end calculation for suplier final balance  */
          
         return response()
             ->json($data, 200);  
