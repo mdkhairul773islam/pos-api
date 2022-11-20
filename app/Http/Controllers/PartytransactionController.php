@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Resources\PartytransactionResource;
 
 use App\Models\Partytransaction;
 use App\Models\Party;
@@ -35,7 +36,7 @@ class PartytransactionController extends Controller
         if(!empty($request->party_code)){
             $where[] = ['partytransactions.party_code','=',$request->party_code];
         }
-
+        
         $data =
             Partytransaction::addSelect(['name' => Party::select('name')
             ->whereColumn('code', 'partytransactions.party_code')])
@@ -72,6 +73,7 @@ class PartytransactionController extends Controller
         $data->paid_by = $request->paid_by;
         $data->remark = $request->remark;
         $data->party_code = $request->party_code;
+		$data->transaction_type = $request->transaction_type;
         $data->transaction_method = $request->transaction_method;
         $data->warehouse_id = $request->warehouse_id;
 
@@ -131,9 +133,11 @@ class PartytransactionController extends Controller
      * @param  \App\Models\Partytransaction  $partytransaction
      * @return \Illuminate\Http\Response
      */
-    public function edit($partytransaction)
-    {
-        return "edit";
+    public function edit($id)
+    {   
+        $data =  new PartytransactionResource(Partytransaction::with("party")->find($id));
+        return response()
+        ->json($data, 200);
     }
 
     /**

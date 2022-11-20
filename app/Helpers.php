@@ -54,18 +54,35 @@ if(!function_exists('base64FormatingFileUplaod')){
 
 // get get_supplier_balance 
 if (!function_exists('getSupplierBalance')) {
-    function getSupplierBalance($code = null)
+    function getSupplierBalance($code=null, $id=null)
     {
-        $data = [];
+        $data  = [];
+        $where = [];
         if(!empty($code)){
             // define default amount
             $initital_balance = $debit = $credit = $balance = 0;
-            // get supplier info 
-            $supplier_info = Party::with('partytransaction')->where("code", $code)->first();
-            if(!empty($supplier_info->partytransaction)){
-                foreach($supplier_info->partytransaction as $row){
+            // get supplier info
+            $supplier_info = Party::with('partytransaction')->where('code','=', $code)->first();
+            if(!empty($id)){
+                $partytransaction = Partytransaction::where([['id', '<', $id], ['party_code', '=', $code]])->get();
+                
+                /* You can also use like this */
+                /* $results = User::orderBy('id','DESC');
+                $results = $results->where('column1','=', $value1);
+                $results = $results->where('column2','<',  $value2);
+                $results = $results->where('column3','>',  $value3);
+                $results = $results->get(); */
+
+                foreach($partytransaction as $row){
                     $credit     += $row->credit;
                     $debit      += $row->debit;
+                }
+            }else{
+                if(!empty($supplier_info->partytransaction)){
+                    foreach($supplier_info->partytransaction as $row){
+                        $credit     += $row->credit;
+                        $debit      += $row->debit;
+                    }
                 }
             } 
 
