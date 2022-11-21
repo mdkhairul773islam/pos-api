@@ -69,5 +69,4 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
     
     //suplier transaction module
     Route::resource('party-transaction', App\Http\Controllers\PartytransactionController::class);
-    Route::get('party-transaction-destroy/{id}', [App\Http\Controllers\PartytransactionController::class, 'destroy']);
 });

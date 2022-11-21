@@ -36,7 +36,6 @@ class PartytransactionController extends Controller
         if(!empty($request->party_code)){
             $where[] = ['partytransactions.party_code','=',$request->party_code];
         }
-        
         $data =
             Partytransaction::addSelect(['name' => Party::select('name')
             ->whereColumn('code', 'partytransactions.party_code')])
@@ -149,7 +148,38 @@ class PartytransactionController extends Controller
      */
     public function update(Request $request)
     {
-        return "update";
+        $data = Partytransaction::find($request->id);
+
+        $data->transaction_at = $request->date;
+        $data->paid_by = $request->paid_by;
+        $data->remark = $request->remark;
+		$data->transaction_type = $request->transaction_type;
+        $data->transaction_method = $request->transaction_method;
+
+        if($request->balance_status== 'Payable'){
+            if($request->transaction_type == 'receive'){
+                $data['credit'] = $request->payment;
+                $data['debit'] = 0;
+            }else{
+                $data['debit'] = $request->payment;
+                $data['credit'] = 0;
+            }
+        }else{
+            if($request->transaction_type == 'receive'){
+                $data['debit'] = 0;
+                $data['credit'] = $request->payment;
+            }else{
+                $data['credit'] = 0;
+                $data['debit'] = $request->payment;
+            }
+        }
+
+        $data->save();
+
+        $data = ['success' => 'Party Transaction successfully update.'];
+        
+        return response()
+        ->json($data, 200);
     }
     public function destroy($id)
     {
