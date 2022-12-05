@@ -102,6 +102,7 @@ class PartytransactionController extends Controller
             }
         }
 
+        $data->commission       = $request->commission;
         $data->status           = "transaction";
         $data->transaction_by   = "suplier";
 
@@ -173,7 +174,7 @@ class PartytransactionController extends Controller
                 $data['debit'] = $request->payment;
             }
         }
-
+        $data->commission = $request->commission;
         $data->save();
 
         $data = ['success' => 'Party Transaction successfully update.'];

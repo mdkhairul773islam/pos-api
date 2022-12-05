@@ -16,7 +16,8 @@ class Party extends Model
     {  
         return $this->hasMany(Partytransaction::class, 'party_code', 'code')
         ->selectRaw('partytransactions.party_code, SUM(partytransactions.credit) as credit,
-        SUM(partytransactions.debit) as debit') 
+        SUM(partytransactions.debit) as debit,
+        SUM(partytransactions.commission) as commission') 
         ->groupBy('partytransactions.party_code');
     }
 }

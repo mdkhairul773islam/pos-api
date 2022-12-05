@@ -21,6 +21,7 @@ class CreatePartytransactionsTable extends Migration
             $table->string('relation');
             $table->decimal('credit', 10,2);
             $table->decimal('debit', 10,2);
+            $table->decimal('commission', 10,2);
             $table->string('transaction_method');
 			$table->string('transaction_type', 100);
             $table->longText('remark')->nullable();

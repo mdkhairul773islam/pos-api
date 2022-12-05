@@ -26,25 +26,28 @@ class SupplierController extends Controller
             /* start calculation for suplier final balance */
             if(!empty($data)){
                 foreach($data as $key => $row){
-                    $credit = 0;
-                    $debit  = 0;
+                    $credit = $debit = $commission = 0;
                     if(!empty($row->partytransaction)){
                         foreach($row->partytransaction as $amount){
                             $credit = $amount->credit;
                             $debit  = $amount->debit;
+                            $commission = $amount->commission;
                         }
                     }
                     $initital_balance = $row->initial_balance;
                     $credit           = $credit;
                     $debit            = $debit;
+                    $commission       = $commission;
 
                     if ($initital_balance < 0) {
                         $balance = $debit - (abs($initital_balance) + $credit);
                     } else {
                         $balance = ($initital_balance + $debit) - $credit;
                     }
+                    $balance = $balance - $commission;
 
                     $balance = number_format($balance, 2,".","");
+                    
                     $data[$key]['status']  = ($balance <= 0 ? "Payable" : "Receivable");
                     $data[$key]['balance'] = $balance;
                 }
