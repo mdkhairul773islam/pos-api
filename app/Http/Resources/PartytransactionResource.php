@@ -24,6 +24,7 @@ class PartytransactionResource extends JsonResource
         return [
             "created_at"=>$this->created_at,
             "credit"=>$this->credit,
+            "commission"=>$this->commission,
             "debit"=>$this->debit,
             "deleted_at"=>$this->deleted_at,
             "id"=>$this->id,
