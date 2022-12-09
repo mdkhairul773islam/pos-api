@@ -178,3 +178,12 @@ if (!function_exists('getClientBalance')) {
         return $data;
     }
 }
+/* Ektra Helper */
+/*
+Role: One [with('party:code, name')] no space use when use space then get error, [with('party:code,name')] this use right
+Partytransaction::with('party:code,name,id,mobile,address')->find($partytransaction);
+Role: Two 
+Partytransaction::with(['party'=>function($query){
+        $query->select('id','code', 'name');
+    }])->find($partytransaction);
+*/

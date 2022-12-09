@@ -122,7 +122,7 @@ class PartytransactionController extends Controller
      */
     public function show($partytransaction)
     {
-        $data = Partytransaction::with("party")->find($partytransaction);
+        $data = Partytransaction::with('party:code,name,id,mobile,address')->find($partytransaction);
         return response()
         ->json($data, 200);
     }
