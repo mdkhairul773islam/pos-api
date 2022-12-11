@@ -102,7 +102,7 @@ class PartytransactionController extends Controller
             }
         }
 
-        $data->commission       = $request->commission;
+        $data->commission       = $request->commission ? $request->commission : 0;
         $data->status           = "transaction";
         $data->transaction_by   = "suplier";
 

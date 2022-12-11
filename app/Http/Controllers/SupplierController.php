@@ -127,7 +127,9 @@ class SupplierController extends Controller
         $data['asideSubmenu'] = 'allSupplier';
 
         $data = Party::find($id);
-
+        $current_balance = getSupplierBalance($data->code);
+        $data['current_balance'] = (!empty($current_balance) ? $current_balance['balance'].' ['.$current_balance['status'].'] Tk.': 0);
+        
         return response()->json($data, 200);
     }
 

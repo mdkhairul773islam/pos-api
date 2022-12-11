@@ -62,6 +62,7 @@ Route::group( ['prefix' => 'admin','middleware' => ['auth:admin-api','scopes:adm
     Route::get('/supplier-list/{warehouse_id}', [App\Http\Controllers\SupplierController::class, 'supplierList']);
     Route::post('/supplier-store', [App\Http\Controllers\SupplierController::class, 'store']);
     Route::get('/supplier-edit/{id}', [App\Http\Controllers\SupplierController::class, 'edit']);
+    Route::get('/supplier-show/{id}', [App\Http\Controllers\SupplierController::class, 'show']);
     Route::post('/supplier-update', [App\Http\Controllers\SupplierController::class, 'update']);
     Route::get('/supplier-destroy/{id}', [App\Http\Controllers\SupplierController::class, 'destroy']);
     Route::get('/showroom-wise-supplier/{showroom_id}', [App\Http\Controllers\SupplierController::class, 'showroomWiseSupplier']);
