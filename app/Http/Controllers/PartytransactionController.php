@@ -123,6 +123,13 @@ class PartytransactionController extends Controller
     public function show($partytransaction)
     {
         $data = Partytransaction::with('party:code,name,id,mobile,address')->find($partytransaction);
+        
+        $current_balance = getSupplierBalance($data->party_code);
+        $previuse_balance = getSupplierBalance($data->party_code, $data->id);
+        
+        $data['previuse_balance'] = (!empty($previuse_balance) ? $previuse_balance['balance'].' ['.$previuse_balance['status'].']': 0);
+        $data['current_balance'] = (!empty($current_balance) ? $current_balance['balance'].' ['.$current_balance['status'].']': 0);
+
         return response()
         ->json($data, 200);
     }
